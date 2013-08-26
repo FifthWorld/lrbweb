@@ -1,0 +1,84 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="profilePage.master.cs" Inherits="User_profilePage" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Ondo State Land Records Bureau</title>
+    <link href='http://fonts.googleapis.com/css?family=Abel|Open+Sans:400,600' rel='stylesheet'/>
+    <link rel="stylesheet" href="../App_Themes/SiteTheme/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="../App_Themes/SiteTheme/bootstrap/css/bootstrap-responsive.css" />
+    <link rel="stylesheet" href="../App_Themes/SiteTheme/bootstrap/css/docs.css" />
+    <script type="text/javascript" src="../App_Themes/SiteTheme/bootstrap/js/jquery.js"></script>
+    <script type="text/javascript" src="../App_Themes/SiteTheme/bootstrap/js/bootstrap.min.js"></script>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidenav">
+    <form id="userpage" runat="server">
+        <!-- COmmencement of the top navigation bar--->
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+
+                    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+
+                    <!-- Be sure to leave the brand out there if you want it shown -->
+                    <a class="brand" href="#">Land Records Bureau</a>
+
+                    <!-- Everything you want hidden at 940px or less, place within here -->
+                    <div class="nav-collapse collapse">
+                        <!-- .nav, .navbar-search, .navbar-form, etc -->
+                        <ul class="nav">
+                            <li>
+                                <a href="dashboard">Dashboard</a>
+                            </li>
+                            <li class="dropdown pull-right">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Options <i class="caret"></i></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#"><i class="icon-wrench"></i> Settings</a></li>
+                                    <li><a href="applications"><i class="icon-folder-open"></i> Applications</a></li>
+                                    <li><a href="#"></a></li>
+                                    <li class="divider"></li>
+                                    <li class="nav-header"></li>
+                                    <li>
+                                        <asp:LoginStatus ID="LoginStatus1" runat="server" /> 
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div>
+            <!--Termination of the navigation bar -->
+                <!---Commencement of the Sidebar -->
+                <div class="span3 bs-docs-sidenav">
+                    <ul class="nav nav-list bs-docs-sidenav affix">
+                        <li><a href="Default.aspx"><i class="icon-chevron-right"></i>Dashboard</a></li>
+                        <li><a href="Applications.aspx"><i class="icon-chevron-right"></i>Applications</a></li>
+                        <li><a href="ApplicationStatus.aspx"><i class="icon-chevron-right"></i>Application Status</a></li>
+                        <li><a href="Profile.aspx"><i class="icon-chevron-right"></i>Profile settings</a></li>
+                        <li><a href="Certificates.aspx"><i class="icon-chevron-right"></i>Certificates</a></li>
+                        <li><a href="Forms/Default.aspx"><i class="icon-plus-sign"></i>Apply for C of O</a></li>
+                    </ul>
+                </div>
+                <div class="span9">
+                    <asp:ContentPlaceHolder runat="server" ID="mainContent"></asp:ContentPlaceHolder>
+                </div>
+            <asp:ContentPlaceHolder ID="header" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+        <div class="container">
+        </div>
+
+    </form>
+</body>
+</html>
