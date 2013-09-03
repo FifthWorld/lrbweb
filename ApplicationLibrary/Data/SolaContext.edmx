@@ -54,7 +54,7 @@
     <Property Name="MobileNo" Type="nvarchar(max)" Nullable="true" />
     <Property Name="HomeNo" Type="nvarchar(max)" Nullable="true" />
     <Property Name="Fax" Type="nvarchar(max)" Nullable="true" />
-    <Property Name="Email" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Email" Type="nvarchar(max)" Nullable="true" DefaultValue="yourname@example.com" />
     <Property Name="PartyType" Type="nvarchar(max)" Nullable="true" />
     <Property Name="OrganizationName" Type="nvarchar(max)" Nullable="true" />
     <Property Name="Occupation" Type="nvarchar(max)" Nullable="true" />
@@ -96,6 +96,8 @@
     <Property Name="OtherRelevantInfo" Type="nvarchar(max)" Nullable="true" />
     <Property Name="SubmissionDate" Type="datetime" Nullable="true" />
     <Property Name="StartDate" Type="datetime" Nullable="false" />
+    <Property Name="Status" Type="nvarchar(max)" Nullable="false" DefaultValue="Incomplete" />
+    <Property Name="SolaId" Type="nvarchar(max)" Nullable="true" />
   </EntityType>
   <EntityType Name="Citizens">
     <Key>
@@ -246,7 +248,7 @@
           <Property Type="String" Name="MobileNo" Nullable="true" />
           <Property Type="String" Name="HomeNo" Nullable="true" />
           <Property Type="String" Name="Fax" Nullable="true" />
-          <Property Type="String" Name="Email" Nullable="true" />
+          <Property Type="String" Name="Email" Nullable="true" DefaultValue="yourname@example.com" />
           <Property Type="String" Name="PartyType" Nullable="true" />
           <Property Type="String" Name="OrganizationName" Nullable="true" />
           <NavigationProperty Name="Addresses" Relationship="SolaContext.PartyAddress" FromRole="Party" ToRole="Address" />
@@ -293,6 +295,8 @@
           <NavigationProperty Name="Properties" Relationship="SolaContext.ApplicationProperty" FromRole="Application" ToRole="Property" />
           <NavigationProperty Name="Parties" Relationship="SolaContext.ApplicationParty" FromRole="Application" ToRole="Party" />
           <NavigationProperty Name="Documents" Relationship="SolaContext.ApplicationDocument" FromRole="Application" ToRole="Document" />
+          <Property Type="String" Name="Status" Nullable="false" DefaultValue="Incomplete" />
+          <Property Type="String" Name="SolaId" Nullable="true" />
         </EntityType>
         <EntityType Name="Citizen">
           <Key>
@@ -407,6 +411,8 @@
           <ScalarProperty Name="OtherRelevantInfo" ColumnName="OtherRelevantInfo" />
           <ScalarProperty Name="SubmissionDate" ColumnName="SubmissionDate" />
           <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="SolaId" ColumnName="SolaId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

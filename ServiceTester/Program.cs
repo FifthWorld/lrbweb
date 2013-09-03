@@ -19,16 +19,16 @@ namespace ServiceTester
             IAdministrativeService administrativeService = AdministrativeServiceProxy.Instance;
             administrativeService.SetCredentials("test", "test");
             Console.WriteLine("AdministrativeService.CheckConnection = " + administrativeService.CheckConnection());
-            baUnitTO baUnit = administrativeService.GetBaUnitById("2965019"); // Valid BA Unit Id required!!
-            if (baUnit != null)
-            {
-                Console.WriteLine("AdministrativeService.GetBaUnitById = " + baUnit.nameFirstpart + "/" + baUnit.nameLastpart + " - " + baUnit.rowVersion);
+            //baUnitTO baUnit = administrativeService.GetBaUnitById("2965019"); // Valid BA Unit Id required!!
+            //if (baUnit != null)
+            //{
+            //    Console.WriteLine("AdministrativeService.GetBaUnitById = " + baUnit.nameFirstpart + "/" + baUnit.nameLastpart + " - " + baUnit.rowVersion);
             
-                // To test the save you need to provide a service id that is referenced by a pending transaction.transaction
-                //baUnit.nameFirstpart = "2";
-                //baUnit = administrativeService.SaveBaUnit("26cf9f4e-8081-475e-831e-275967754c98", baUnit);
-                //Console.WriteLine("AdministrativeService.SaveBaUnit = " + baUnit.nameFirstpart + "/" + baUnit.nameLastpart + " - " + baUnit.rowVersion);
-            }
+            //    // To test the save you need to provide a service id that is referenced by a pending transaction.transaction
+            //    //baUnit.nameFirstpart = "2";
+            //    //baUnit = administrativeService.SaveBaUnit("26cf9f4e-8081-475e-831e-275967754c98", baUnit);
+            //    //Console.WriteLine("AdministrativeService.SaveBaUnit = " + baUnit.nameFirstpart + "/" + baUnit.nameLastpart + " - " + baUnit.rowVersion);
+            //}
 
             ISearchService searchService = SearchServiceProxy.Instance;
             searchService.SetCredentials("test", "test");
@@ -51,13 +51,12 @@ namespace ServiceTester
             party.dateOfBirth=DateTime.Now;
             party.dateOfBirthSpecified=true;
             party.email="e911miri@gmail.com";
-            party.fathersLastName="Ijaware";
+            party.fathersLastName="Miriwa";
             party.fathersName="Wisdom";
             party.lastName="Tomiwa";
             party.mobile="07037290250";
             party.name="Tomiwa Ijaware";
             party.phone="07037290250";
-            party.stateCode="M";
             party.typeCode = "naturalPerson";
             partyTO p=caseManagementService.SaveParty(party);
             Console.WriteLine("PArty with ID "+p.id+ " has just been loaded");
@@ -68,11 +67,23 @@ namespace ServiceTester
             };
             
 
-            applicationTO app2 = caseManagementService.CreateApplication(new applicationTO() { 
-                contactPerson=party
-            });
+            applicationTO app2 = new applicationTO() { 
+                contactPerson=party,
+                serviceList = new serviceTO[]
+                {
+                    new serviceTO(){
+                        requestTypeCode="newCofO",
+                        actionCode="lodge",
+                        statusCode="lodged",                        
+                    }
+                }
+            };
             caseManagementService.SaveApplication(app2);
-            Console.ReadLine();
+            Console.WriteLine("Application has been saved successfully");
+
+            var app3 = caseManagementService.GetApplication(app2.id);
+            
+            Console.ReadKey();
         }
     }
 

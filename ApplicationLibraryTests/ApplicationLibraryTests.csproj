@@ -56,6 +56,7 @@
     <Compile Include="SolaConnectionTests.cs" />
     <Compile Include="DocumentsTests.cs" />
     <Compile Include="ApplicationTests.cs" />
+    <Compile Include="ApplicationPartyTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ApplicationLibrary\ApplicationLibrary.csproj">

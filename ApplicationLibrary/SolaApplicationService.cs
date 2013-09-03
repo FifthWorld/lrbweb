@@ -3,6 +3,7 @@ using org.sola.services.boundary.wsclients;
 using org.sola.webservices.casemanagement.extra;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,56 +59,49 @@ namespace ApplicationLibrary
             }
         }
 
-        private applicationTO getAppTO()
+        public Application getApplicationById(int Id)
         {
-            applicationTO appTO = new applicationTO();
-            appTO.nr = app.EntityKey.ToString();
-            appTO.contactPerson = new partyTO();
-            var property = app.Properties.FirstOrDefault();
-            appTO.propertyList = new applicationPropertyTO[]{new applicationPropertyTO(){
-                area= property.ApproximateArea.GetValueOrDefault(),
-                propertyLoc=property.MainAddress
-            }};
-
-            appTO.contactPerson = new partyTO();
-            appTO.contactPerson.fathersName = app.ContactPerson.Firstname;
-            appTO.contactPerson.lastName = app.ContactPerson.Surname;
-            appTO.contactPerson.email = app.ContactPerson.Email;
-            appTO.contactPerson.corporateName = app.ContactPerson.OrganizationName;
-            appTO.contactPerson.alias = app.ContactPerson.Firstname;
-            appTO.contactPerson.dateOfBirth = app.ContactPerson.DOB.GetValueOrDefault();
-            appTO.contactPerson.genderCode = app.ContactPerson.Gender;
-            appTO.contactPerson.typeCode = app.ContactPerson.OrganizationName != null ? "nonNaturalPerson" : "naturalPerson";
-            //homeTownTypeCode = app.Party.homeTownTypeCode,                
-            //lgaTypeCode = app.Party.lgaTypeCode,
-            //stateTypeCode = app.Party.stateCode,
-            //titleTypeCode = app.Party.titleCode,
-            appTO.contactPerson.mobile = app.ContactPerson.MobileNo;
-            appTO.contactPerson.occupationTypeCode = app.ContactPerson.Occupation;
-            appTO.contactPerson.rightHolder = true;
-
-
-            appTO.contactPerson.address = new addressTO()
-            {
-                //description = app.ContactPerson.Addresses.FirstOrDefault,
-            };
-            appTO.contactPerson.preferredCommunicationCode = "phone";
-            appTO.contactPerson.employerAddress = app.ContactPerson.EmployerAddress;
-            appTO.contactPerson.employerName = app.ContactPerson.EmployerName;
-
-            appTO = attachDocuments(app, appTO);
-            appTO.serviceList = new serviceTO[]
-            {
-                new serviceTO(){
-                    requestTypeCode="newDigitalTitle",
-                    actionCode="lodge",
-                    statusCode="lodged",                    
-                }
-            };
-            return appTO;
+            return Context.Applications.Where(p => p.Id == Id).FirstOrDefault();
         }
 
-        private applicationTO attachDocuments(Application app, applicationTO appTO)
+        public applicationTO SubmitToSola()
+        {            
+            save();
+
+            if (isComplete())
+            {
+                // initialize the case manegement service
+                ICaseManagementService caseManagementService = CasemanagementProxy.Instance;
+                caseManagementService.SetCredentials(username, password);
+
+                var appTO = new applicationTO();
+                var contactPerson = getContactPerson();
+                appTO.contactPerson = contactPerson;
+
+                appTO.propertyList = getPropertyList();
+                appTO.serviceList = getServiceList();
+                appTO.sourceList = getSourceList();
+
+                var solaAppTO = caseManagementService.SaveApplication(appTO);
+                app.SolaId = solaAppTO.nr;
+                app.Status = solaAppTO.statusCode;
+                
+                return solaAppTO;
+            }
+
+            return null;
+        }
+
+        public bool isComplete()
+        {
+            return
+                   app.UserId != null
+                && app.ContactPerson.Firstname != null
+                && app.ContactPerson.Surname != null
+                && app.ContactPerson.MobileNo != null;
+        }
+
+        private sourceTO[] getSourceList()
         {
             SolaDocService docService = new SolaDocService(username, password);
             var SourceList = new List<sourceTO>();
@@ -116,30 +110,77 @@ namespace ApplicationLibrary
                 SourceList.Add(docService.makeSourceTO(doc.Content, doc.Extension, doc.Description, app.ContactPerson.getName));
 
             }
-            appTO.sourceList = SourceList.ToArray();
-            return appTO;
+            return SourceList.ToArray();
         }
 
-        public Application getApplicationById(int Id)
+        private serviceTO[] getServiceList()
         {
-            return Context.Applications.Where(p => p.Id == Id).FirstOrDefault();
+            return new serviceTO[]
+            {
+                new serviceTO(){
+                    requestTypeCode="newCofO",
+                    actionCode="lodge",
+                    statusCode="lodged",                    
+                }
+            };
         }
 
-        public applicationTO SubmitToSola()
+        private applicationPropertyTO[] getPropertyList()
         {
-            var appTO = getAppTO();
-            ICaseManagementService caseManagementService = CasemanagementProxy.Instance;
-            caseManagementService.SetCredentials(username, password);
+            return null;
+        }
 
-            var solaAppTO = caseManagementService.SaveApplication(appTO);
-            return solaAppTO;
+        private partyTO getContactPerson()
+        {
+            var person = new partyTO();
+            person.fathersName = app.ContactPerson.Firstname;
+            person.lastName = app.ContactPerson.Surname;
+            person.email = app.ContactPerson.Email;
+            person.corporateName = app.ContactPerson.OrganizationName;
+            person.alias = app.ContactPerson.Firstname;
+            person.dateOfBirth = app.ContactPerson.DOB.GetValueOrDefault();
+            //person.genderCode = app.ContactPerson.Gender;
+            person.typeCode = app.ContactPerson.OrganizationName != null ? "nonNaturalPerson" : "naturalPerson";
+            //homeTownTypeCode = app.Party.homeTownTypeCode,                
+            //lgaTypeCode = app.Party.lgaTypeCode,
+            //stateTypeCode = app.Party.stateCode,
+            //titleTypeCode = app.Party.titleCode,
+            person.mobile = app.ContactPerson.MobileNo;
+            // person.occupationTypeCode = app.ContactPerson.Occupation;
+            // person.rightHolder = true;
+
+
+            person.address = new addressTO()
+            {
+                description = "tomcat avenue, smoky way, wandechris, Nigeria"
+                // description = app.ContactPerson.Addresses[0],
+            };
+            // person.preferredCommunicationCode = "phone";
+            person.employerAddress = app.ContactPerson.EmployerAddress;
+            person.employerName = app.ContactPerson.EmployerName;
+
+            return person;
         }
 
         public string save()
         {
-            Context.AddToApplications(app);
-            Context.SaveChanges();
-            return app.EntityKey.ToString();
+            if (app.UserId == null)
+            {
+                app.Status = "No User";
+            }
+            else
+            {
+                if (app.EntityState == EntityState.Detached)
+                {
+                    Context.AddToApplications(app);
+                }
+
+                app.Status = "Incomplete";
+                Context.SaveChanges();
+                return app.EntityKey.ToString();
+            }
+
+            return null;
         }
     }
 }

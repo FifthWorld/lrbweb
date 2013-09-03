@@ -685,6 +685,54 @@ namespace ApplicationLibrary.Data
         private global::System.DateTime _StartDate;
         partial void OnStartDateChanging(global::System.DateTime value);
         partial void OnStartDateChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Status
+        {
+            get
+            {
+                return _Status;
+            }
+            set
+            {
+                OnStatusChanging(value);
+                ReportPropertyChanging("Status");
+                _Status = StructuralObject.SetValidValue(value, false, "Status");
+                ReportPropertyChanged("Status");
+                OnStatusChanged();
+            }
+        }
+        private global::System.String _Status = "Incomplete";
+        partial void OnStatusChanging(global::System.String value);
+        partial void OnStatusChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String SolaId
+        {
+            get
+            {
+                return _SolaId;
+            }
+            set
+            {
+                OnSolaIdChanging(value);
+                ReportPropertyChanging("SolaId");
+                _SolaId = StructuralObject.SetValidValue(value, true, "SolaId");
+                ReportPropertyChanged("SolaId");
+                OnSolaIdChanged();
+            }
+        }
+        private global::System.String _SolaId;
+        partial void OnSolaIdChanging(global::System.String value);
+        partial void OnSolaIdChanged();
 
         #endregion
 
@@ -1550,7 +1598,7 @@ namespace ApplicationLibrary.Data
                 OnEmailChanged();
             }
         }
-        private global::System.String _Email;
+        private global::System.String _Email = "yourname@example.com";
         partial void OnEmailChanging(global::System.String value);
         partial void OnEmailChanged();
     

@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 08/20/2013 15:04:31
+-- Date Created: 09/02/2013 14:31:13
 -- Generated from EDMX file: C:\Users\tomiwa\Documents\Visual Studio 2012\Projects\OndoLRBWeb\ApplicationLibrary\Data\SolaContext.edmx
 -- --------------------------------------------------
 
@@ -32,11 +32,8 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_ApplicationParty]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[Parties] DROP CONSTRAINT [FK_ApplicationParty];
 GO
-IF OBJECT_ID(N'[dbo].[FK_PropertyDocument]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Documents] DROP CONSTRAINT [FK_PropertyDocument];
-GO
-IF OBJECT_ID(N'[dbo].[FK_PartyDocument]', 'F') IS NOT NULL
-    ALTER TABLE [dbo].[Documents] DROP CONSTRAINT [FK_PartyDocument];
+IF OBJECT_ID(N'[dbo].[FK_ApplicationDocument]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Documents] DROP CONSTRAINT [FK_ApplicationDocument];
 GO
 
 -- --------------------------------------------------
@@ -122,7 +119,9 @@ CREATE TABLE [dbo].[Applications] (
     [SubmittedbyApplicant] bit  NULL,
     [OtherRelevantInfo] nvarchar(max)  NULL,
     [SubmissionDate] datetime  NULL,
-    [StartDate] datetime  NOT NULL
+    [StartDate] datetime  NOT NULL,
+    [Status] nvarchar(max)  NOT NULL,
+    [SolaId] nvarchar(max)  NULL
 );
 GO
 

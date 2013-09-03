@@ -48,6 +48,8 @@ namespace ApplicationLibraryTests
             //There should be only one party and one property attached to this application
             Assert.IsTrue(app.Parties.Count == 1);
             Assert.IsTrue(app.Properties.Count == 1);
+
+            Assert.IsFalse(SolaAppSvc.isComplete());
         }
 
 
@@ -59,13 +61,24 @@ namespace ApplicationLibraryTests
             app.UserId = "e911miri";
             app.ContactPerson.Email="e911miri@gmail.com";
             app.ContactPerson.DOB = DateTime.Today;
-
-            app.Properties.Add(new Property()
+            app.ContactPerson.Firstname = "Tomiwa";
+            app.ContactPerson.Surname = "Ijaware";
+            app.ContactPerson.Middlename = "Wisdom";
+            app.ContactPerson.MobileNo = "07037290250";
+            app.ContactPerson.Addresses.Add(new Address()
             {
-                Developed = false,
-                LandUse = "Smoking"
+                City = "akure",
+                State = "Ondo",
+                Street = "No 1. Mt Gerizm Road",
+                PMBNo = "10"
             });
-            app.SubmissionDate = DateTime.Now;
+
+            //app.Properties.Add(new Property()
+            //{
+            //    Developed = false,
+            //    LandUse = "Smoking"
+            //});
+            //app.SubmissionDate = DateTime.Now;
 
             SolaApplicationService SolaAppSvc = new SolaApplicationService();
             SolaAppSvc.app = app;

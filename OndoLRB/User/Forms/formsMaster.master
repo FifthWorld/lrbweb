@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="formsMaster.master.cs" Inherits="User_Forms_formsMaster" %>
+﻿gi<%@ Master Language="C#" AutoEventWireup="true" CodeFile="formsMaster.master.cs" Inherits="User_Forms_formsMaster" %>
 
 <!DOCTYPE html>
 
